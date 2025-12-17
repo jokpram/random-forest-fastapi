@@ -173,13 +173,14 @@ def predict_delay(
         db.commit()
         db.refresh(db_weather_data)
         
-        # Create prediction record
+        # Create prediction record - PERBAIKAN DI SINI
+        features_list = features if isinstance(features, list) else list(features) if features else []
         prediction_data = schemas.PredictionCreate(
             weather_data_id=db_weather_data.id,
             predicted_delay_hours=predicted_delay,
             high_delay_risk=high_delay_risk,
             confidence_score=confidence_score,
-            features_used=json.dumps(features.tolist() if features else [])
+            features_used=json.dumps(features_list)
         )
         
         db_prediction = crud.create_prediction(db, prediction_data)
